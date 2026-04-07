@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Multi Screen by M106T</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+transition:.3s;
+}
+
+body.light{
+background:white;
+color:#111;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:sticky;
+top:0;
+z-index:1000;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 25px;
+background:#020617;
+}
+
+body.light .navbar{
+background:#e5e7eb;
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#22c55e;
+}
+
+.navlinks a{
+margin-left:20px;
+text-decoration:none;
+color:white;
+}
+
+body.light .navlinks a{
+color:#111;
+}
+
+button{
+padding:10px 14px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin:5px;
+}
+
+.start{background:#22c55e;color:white;}
+.stop{background:#f59e0b;color:white;}
+.clear{background:#ef4444;color:white;}
+.theme{background:#3b82f6;color:white;}
+
+/* HOME */
+
+.home{
+text-align:center;
+padding:60px 20px;
+}
+
+.channel-img{
+width:260px;
+border-radius:12px;
+}
+
+/* PANEL */
+
+.panel{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+max-width:420px;
+margin:40px auto;
+text-align:center;
+}
+
+body.light .panel{
+background:#f1f5f9;
+}
+
+input{
+width:90%;
+padding:10px;
+margin:6px;
+border-radius:6px;
+border:none;
+}
+
+/* GRID */
+
+.frames{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+gap:15px;
+padding:20px;
+}
+
+.frame-box{
+position:relative;
+}
+
+.frames iframe{
+width:100%;
+border:none;
+border-radius:8px;
+}
+
+.full{
+position:absolute;
+top:6px;
+right:6px;
+background:black;
+color:white;
+font-size:12px;
+padding:4px 8px;
+border:none;
+border-radius:4px;
+cursor:pointer;
+}
+
+.about{
+text-align:center;
+padding:40px;
+color:#94a3b8;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+<div class="logo">Multi Screen by M106T</div>
+
+<div class="navlinks">
+<a href="#home">Home</a>
+<a href="#tool">Generator</a>
+<a href="#about">About</a>
+</div>
+
+<button class="theme" onclick="toggleTheme()">Theme</button>
+
+</div>
+
+<!-- HOME -->
+
+<div class="home" id="home">
+
+<h1>Multi Screen by M106T</h1>
+
+<img src="35.jpg" class="channel-img">
+
+<br><br>
+
+<a href="https://youtube.com/@m106t" target="_blank">
+<button class="start">Visit Channel</button>
+</a>
+
+</div>
+
+<!-- TOOL -->
+
+<div class="panel" id="tool">
+
+<h2>Multi Screen Generator</h2>
+
+<input id="link" placeholder="Paste Link">
+
+<input id="count" type="number" placeholder="Screen Count">
+
+<input id="reload" type="number" placeholder="Reload Time (sec)">
+
+<label>Screen Height</label>
+
+<input type="range" id="size" min="200" max="600" value="300">
+
+<p>Height: <span id="sizeValue">300</span>px</p>
+
+<button class="start" onclick="createFrames()">Start</button>
+<button class="stop" onclick="stopReload()">Stop</button>
+<button class="clear" onclick="clearFrames()">Clear</button>
+
+<p>Total Screens: <span id="frameCount">0</span></p>
+
+</div>
+
+<div class="frames" id="frames"></div>
+
+<!-- ABOUT -->
+
+<div class="about" id="about">
+
+<h3>About</h3>
+
+<p>Multi Screen by M106T</p>
+<p>A powerful multi iframe viewing tool.</p>
+
+</div>
+
+<script>
+
+let reloadInterval=null;
+
+/* THEME */
+
+function toggleTheme(){
+
+document.body.classList.toggle("light");
+
+if(document.body.classList.contains("light")){
+localStorage.setItem("theme","light");
+}else{
+localStorage.setItem("theme","dark");
+}
+
+}
+
+if(localStorage.getItem("theme")==="light"){
+document.body.classList.add("light");
+}
+
+/* SLIDER */
+
+const slider=document.getElementById("size");
+const sizeValue=document.getElementById("sizeValue");
+
+slider.oninput=function(){
+sizeValue.innerText=this.value;
+
+document.querySelectorAll(".frames iframe").forEach(f=>{
+f.style.height=this.value+"px";
+});
+}
+
+/* LINK CONVERT */
+
+function convertLink(url){
+
+try{
+
+if(url.includes("watch?v=")){
+let id=url.split("v=")[1].split("&")[0];
+return "https://www.youtube.com/embed/"+id;
+}
+
+if(url.includes("youtu.be/")){
+let id=url.split("youtu.be/")[1];
+return "https://www.youtube.com/embed/"+id;
+}
+
+}catch(e){}
+
+return url;
+
+}
+
+/* CREATE */
+
+function createFrames(){
+
+stopReload();
+
+let link=document.getElementById("link").value.trim();
+let count=parseInt(document.getElementById("count").value);
+let reload=parseInt(document.getElementById("reload").value);
+let size=slider.value;
+
+if(!link){
+alert("Please enter link");
+return;
+}
+
+if(!count || count<1){
+count=1;
+}
+
+link=convertLink(link);
+
+let container=document.getElementById("frames");
+
+container.innerHTML="";
+
+for(let i=0;i<count;i++){
+
+let box=document.createElement("div");
+box.className="frame-box";
+
+let iframe=document.createElement("iframe");
+iframe.src=link;
+iframe.style.height=size+"px";
+
+let btn=document.createElement("button");
+btn.innerText="⛶";
+btn.className="full";
+
+btn.onclick=()=>iframe.requestFullscreen();
+
+box.appendChild(iframe);
+box.appendChild(btn);
+
+container.appendChild(box);
+
+}
+
+document.getElementById("frameCount").innerText=count;
+
+if(reload && reload>0){
+
+reloadInterval=setInterval(()=>{
+
+document.querySelectorAll(".frames iframe").forEach(frame=>{
+frame.src=frame.src;
+});
+
+},reload*1000);
+
+}
+
+}
+
+/* STOP */
+
+function stopReload(){
+
+if(reloadInterval){
+clearInterval(reloadInterval);
+reloadInterval=null;
+}
+
+}
+
+/* CLEAR */
+
+function clearFrames(){
+
+stopReload();
+
+document.getElementById("frames").innerHTML="";
+document.getElementById("frameCount").innerText="0";
+
+}
+
+</script>
+
+</body>
+</html>
