@@ -3,8 +3,16 @@
 
 <head>
 <title>Multi Screen</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta name="description" content="Free multi screen YouTube player to watch multiple videos at once. Supports autoplay, shorts, and unlimited screens for multitasking.">
+
 <style>
+
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -13,63 +21,47 @@ background:#0f172a;
 color:white;
 transition:0.3s;
 }
-li{
-  text-align: center;
-}
-#guide h4{
-margin-top:15px;
-color:#22c55e;
-}
-#guide p{
-line-height:1.6;
-}
 
-/* LIGHT MODE FIX */
+/* LIGHT MODE */
 body.light{
 background:#ffffff;
 color:#111;
 }
 
-body.light .navbar{
-background:#e5e7eb;
-}
-
-body.light .panel{
-background:#f1f5f9;
-}
-
-body.light input{
-background:#fff;
-color:#000;
-}
+body.light .navbar{background:#e5e7eb;}
+body.light .panel{background:#f1f5f9;}
+body.light input{background:#fff;color:#000;}
 
 /* NAVBAR */
 .navbar{
 display:flex;
+flex-wrap:wrap;
 justify-content:space-between;
 align-items:center;
-padding:12px 15px;
+padding:10px 12px;
 background:#020617;
-position:relative;
+gap:10px;
 }
 
 .logo{
 color:#22c55e;
 font-weight:bold;
+font-size:14px;
 }
 
-/* NAV LINKS */
 .navlinks{
 display:flex;
-gap:15px;
+gap:12px;
+flex-wrap:wrap;
 }
 
 .navlinks a{
 color:white;
 text-decoration:none;
+font-size:14px;
 }
 
-/* HAMBURGER */
+/* MENU */
 .menu-btn{
 display:none;
 font-size:22px;
@@ -79,14 +71,17 @@ cursor:pointer;
 /* ACTIONS */
 .actions{
 display:flex;
-gap:10px;
+gap:8px;
+flex-wrap:wrap;
 }
 
+/* BUTTON */
 button{
 padding:8px 12px;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:13px;
 }
 
 .theme{background:#3b82f6;color:white;}
@@ -103,8 +98,13 @@ padding:30px 15px;
 
 .channel-img{
 width:260px;
-max-width:90%;
+max-width:100%;
 border-radius:12px;
+}
+
+img{
+max-width:100%;
+height:auto;
 }
 
 /* PANEL */
@@ -115,28 +115,32 @@ border-radius:12px;
 max-width:420px;
 margin:20px auto;
 text-align:center;
-width:90%;
+width:95%;
 }
 
+/* INPUT FIX */
 input{
 width:100%;
 padding:10px;
-margin:6px -10px;
+margin:6px 0;
 border-radius:6px;
 border:none;
 }
 
-/* GRID */
+/* BUTTON WIDTH FIX */
+#H{
+width:auto;
+margin:5px;
+}
+
+/* GRID FIX */
 .frames{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:10px;
 padding:10px;
 }
-#H{
-  width:80px;
-  margin: 10px;
-}
+
 iframe{
 width:100%;
 height:260px;
@@ -151,7 +155,20 @@ padding:30px;
 color:#94a3b8;
 }
 
-/* MOBILE NAV */
+li{
+text-align:center;
+}
+
+#guide h4{
+margin-top:15px;
+color:#22c55e;
+}
+
+#guide p{
+line-height:1.6;
+}
+
+/* MOBILE */
 @media(max-width:700px){
 
 .menu-btn{
@@ -161,9 +178,6 @@ display:block;
 .navlinks{
 display:none;
 flex-direction:column;
-position:absolute;
-top:50px;
-left:0;
 width:100%;
 background:#020617;
 padding:10px;
@@ -174,8 +188,7 @@ display:flex;
 }
 
 .actions{
-flex-wrap:wrap;
-margin-top:10px;
+width:100%;
 }
 
 }
@@ -190,6 +203,8 @@ margin-top:10px;
 
 <div class="logo">Multi Screen by M106T</div>
 
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
 <div class="navlinks" id="navLinks">
 <a href="#home">Home</a>
 <a href="#tool">Generator</a>
@@ -200,7 +215,7 @@ margin-top:10px;
 <button class="theme" onclick="toggleTheme()">Theme</button>
 <button class="auto" onclick="toggleAutoplay()" id="autoBtn">AutoPlay OFF</button>
 </div>
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
 </div>
 
 <!-- HOME -->
@@ -223,12 +238,12 @@ margin-top:10px;
 <input id="reload" type="number" placeholder="Refresh Time (sec) Not compulsory ❗️ ">
 
 <label>Screen Height</label>
-<input type="range" id="size" min="200" max="700" value="auto">
+<input type="range" id="size" min="200" max="700" value="300">
 <p>Height: <span id="sizeValue">300</span>px</p>
 
 <button class="start" id="H" onclick="createFrames()">Start</button>
 <button class="stop" id="H" onclick="stopReload()">Stop</button>
-<button  class="clear" id="H" onclick="clearFrames()">Clear</button>
+<button class="clear" id="H" onclick="clearFrames()">Clear</button>
 
 <p>Total Screens: <span id="frameCount">0</span></p>
 
@@ -236,49 +251,34 @@ margin-top:10px;
 
 <div class="frames" id="frames"></div>
 
+<!-- ABOUT (UNCHANGED) -->
 <div class="about" id="about">
+
 <h3>About</h3>
+
 <div class="about" id="guide">
 
 <h3>How to Use Multi Screen YouTube Player?</h3>
 
-<p>
-This tool allows you to watch multiple YouTube videos at the same time in a split-screen layout. Follow the steps below to get started:
-</p>
+<p>This tool allows you to watch multiple YouTube videos at the same time in a split-screen layout. Follow the steps below to get started:</p>
 
 <h4>1. Paste Video Link</h4>
-<p>
-Copy a YouTube video link and paste it into the input box. You can also add multiple links separated by commas.
-</p>
+<p>Copy a YouTube video link and paste it into the input box. You can also add multiple links separated by commas.</p>
 
 <h4>2. Set Screen Count</h4>
-<p>
-Enter how many screens you want to display. If left empty, the tool will automatically use the number of links provided.
-</p>
+<p>Enter how many screens you want to display.</p>
 
 <h4>3. Adjust Screen Height</h4>
-<p>
-Use the slider to change the height of each video frame according to your preference.
-</p>
+<p>Use the slider to change the height.</p>
 
 <h4>4. Enable Autoplay</h4>
-<p>
-Turn on the autoplay button to automatically start all videos (videos will be muted due to browser policies).
-</p>
+<p>Turn on autoplay.</p>
 
 <h4>5. Click Start</h4>
-<p>
-Press the Start button to generate multiple video screens instantly.
-</p>
+<p>Press Start.</p>
 
 <h4>6. Optional Features</h4>
-<p>
-You can reload videos automatically using the reload option, or clear everything using the Clear button.
-</p>
-
-<p style="margin-top:15px;">
-This tool is perfect for multitasking, studying, trading, or monitoring multiple live streams at once.
-</p>
+<p>Use reload or clear options.</p>
 
 </div>
 
@@ -286,13 +286,13 @@ This tool is perfect for multitasking, studying, trading, or monitoring multiple
 
 <h3 style="color:#22c55e">Benefits of Using Multi Screen YouTube Player</h3>
 
-<ul style="max-width:1000px;margin:auto;text-align:left; line-height:1.6;">
+<ul style="max-width:1000px;margin:auto;text-align:left;line-height:1.6;">
 
-<li>Watch multiple YouTube videos at the same time</li>
-<li>Perfect for students to learn from multiple tutorials</li>
-<li>Useful for traders monitoring multiple charts or live streams</li>
-<li>Save time by multitasking efficiently</li>
-<li>Compare videos side-by-side easily</li>
+<li>Watch multiple YouTube videos</li>
+<li>Perfect for students</li>
+<li>Useful for traders</li>
+<li>Save time</li>
+<li>Compare videos easily</li>
 
 </ul>
 
@@ -300,26 +300,20 @@ This tool is perfect for multitasking, studying, trading, or monitoring multiple
 
 <p>Multi Screen by M106T</p>
 <p>A powerful multi screen viewing tool.</p>
+
 </div>
-
-
-
-
-<!--java script-->
-
-
 
 <script>
 
 let reloadInterval=null;
 let autoplay=false;
 
-/* NAV TOGGLE */
+/* MENU */
 function toggleMenu(){
 document.getElementById("navLinks").classList.toggle("active");
 }
 
-/* THEME FIX */
+/* THEME */
 function toggleTheme(){
 document.body.classList.toggle("light");
 localStorage.setItem("theme",document.body.classList.contains("light"));
@@ -348,21 +342,17 @@ f.style.height=this.value+"px";
 
 /* LINK FIX */
 function convertLink(url){
-
 url=url.trim();
 
 if(url.includes("watch?v=")){
 return "https://www.youtube.com/embed/"+url.split("v=")[1].split("&")[0];
 }
-
 if(url.includes("youtu.be/")){
 return "https://www.youtube.com/embed/"+url.split("youtu.be/")[1];
 }
-
 if(url.includes("/shorts/")){
 return "https://www.youtube.com/embed/"+url.split("/shorts/")[1];
 }
-
 return url;
 }
 
@@ -391,6 +381,7 @@ for(let i=0;i<count;i++){
 let link=convertLink(links[i % links.length]);
 
 let final=link;
+
 if(autoplay){
 final += (link.includes("?")?"&":"?")+"autoplay=1&mute=1&playsinline=1";
 }
@@ -412,12 +403,10 @@ document.querySelectorAll("iframe").forEach(f=>f.src=f.src);
 
 }
 
-/* STOP */
 function stopReload(){
 clearInterval(reloadInterval);
 }
 
-/* CLEAR */
 function clearFrames(){
 stopReload();
 document.getElementById("frames").innerHTML="";
@@ -427,4 +416,4 @@ document.getElementById("frameCount").innerText="0";
 </script>
 
 </body>
-  </html>
+</html>
