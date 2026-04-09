@@ -2,11 +2,8 @@
 <html>
 
 <head>
-
-<title>Multi Screen by M106T</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Multi Screen</title>
+<meta name="description" content="Free multi screen YouTube player to watch multiple videos at once. Supports autoplay, shorts, and unlimited screens for multitasking.">
 <style>
 
 body{
@@ -14,131 +11,173 @@ margin:0;
 font-family:Arial;
 background:#0f172a;
 color:white;
-transition:.3s;
+transition:0.3s;
+}
+li{
+  text-align: center;
+}
+#guide h4{
+margin-top:15px;
+color:#22c55e;
+}
+#guide p{
+line-height:1.6;
 }
 
+/* LIGHT MODE FIX */
 body.light{
-background:white;
+background:#ffffff;
 color:#111;
-}
-
-/* NAVBAR */
-
-.navbar{
-position:sticky;
-top:0;
-z-index:1000;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 25px;
-background:#020617;
 }
 
 body.light .navbar{
 background:#e5e7eb;
 }
 
-.logo{
-font-weight:bold;
-font-size:18px;
-color:#22c55e;
-}
-
-.navlinks a{
-margin-left:20px;
-text-decoration:none;
-color:white;
-}
-
-body.light .navlinks a{
-color:#111;
-}
-
-button{
-padding:10px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-margin:5px;
-}
-
-.start{background:#22c55e;color:white;}
-.stop{background:#f59e0b;color:white;}
-.clear{background:#ef4444;color:white;}
-.theme{background:#3b82f6;color:white;}
-
-/* HOME */
-
-.home{
-text-align:center;
-padding:60px 20px;
-}
-
-.channel-img{
-width:260px;
-border-radius:12px;
-}
-
-/* PANEL */
-
-.panel{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-max-width:420px;
-margin:40px auto;
-text-align:center;
-}
-
 body.light .panel{
 background:#f1f5f9;
 }
 
-input{
+body.light input{
+background:#fff;
+color:#000;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 15px;
+background:#020617;
+position:relative;
+}
+
+.logo{
+color:#22c55e;
+font-weight:bold;
+}
+
+/* NAV LINKS */
+.navlinks{
+display:flex;
+gap:15px;
+}
+
+.navlinks a{
+color:white;
+text-decoration:none;
+}
+
+/* HAMBURGER */
+.menu-btn{
+display:none;
+font-size:22px;
+cursor:pointer;
+}
+
+/* ACTIONS */
+.actions{
+display:flex;
+gap:10px;
+}
+
+button{
+padding:8px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.theme{background:#3b82f6;color:white;}
+.auto{background:#8b5cf6;color:white;}
+.start{background:#22c55e;}
+.stop{background:#f59e0b;}
+.clear{background:#ef4444;}
+
+/* HOME */
+.home{
+text-align:center;
+padding:30px 15px;
+}
+
+.channel-img{
+width:260px;
+max-width:90%;
+border-radius:12px;
+}
+
+/* PANEL */
+.panel{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+max-width:420px;
+margin:20px auto;
+text-align:center;
 width:90%;
+}
+
+input{
+width:100%;
 padding:10px;
-margin:6px;
+margin:6px -10px;
 border-radius:6px;
 border:none;
 }
 
 /* GRID */
-
 .frames{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-gap:15px;
-padding:20px;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
 }
-
-.frame-box{
-position:relative;
+#H{
+  width:80px;
+  margin: 10px;
 }
-
-.frames iframe{
+iframe{
 width:100%;
+height:260px;
 border:none;
 border-radius:8px;
 }
 
-.full{
-position:absolute;
-top:6px;
-right:6px;
-background:black;
-color:white;
-font-size:12px;
-padding:4px 8px;
-border:none;
-border-radius:4px;
-cursor:pointer;
-}
-
+/* ABOUT */
 .about{
 text-align:center;
-padding:40px;
+padding:30px;
 color:#94a3b8;
+}
+
+/* MOBILE NAV */
+@media(max-width:700px){
+
+.menu-btn{
+display:block;
+}
+
+.navlinks{
+display:none;
+flex-direction:column;
+position:absolute;
+top:50px;
+left:0;
+width:100%;
+background:#020617;
+padding:10px;
+}
+
+.navlinks.active{
+display:flex;
+}
+
+.actions{
+flex-wrap:wrap;
+margin-top:10px;
+}
+
 }
 
 </style>
@@ -147,58 +186,49 @@ color:#94a3b8;
 <body>
 
 <!-- NAVBAR -->
-
 <div class="navbar">
 
 <div class="logo">Multi Screen by M106T</div>
 
-<div class="navlinks">
+<div class="navlinks" id="navLinks">
 <a href="#home">Home</a>
 <a href="#tool">Generator</a>
 <a href="#about">About</a>
 </div>
 
+<div class="actions">
 <button class="theme" onclick="toggleTheme()">Theme</button>
-
+<button class="auto" onclick="toggleAutoplay()" id="autoBtn">AutoPlay OFF</button>
+</div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 </div>
 
 <!-- HOME -->
-
 <div class="home" id="home">
-
 <h1>Multi Screen by M106T</h1>
-
 <img src="35.jpg" class="channel-img">
-
 <br><br>
-
 <a href="https://youtube.com/@m106t" target="_blank">
 <button class="start">Visit Channel</button>
 </a>
-
 </div>
 
 <!-- TOOL -->
-
 <div class="panel" id="tool">
 
 <h2>Multi Screen Generator</h2>
 
-<input id="link" placeholder="Paste Link">
-
+<input id="link" placeholder="Paste Link (multiple allowed ,)">
 <input id="count" type="number" placeholder="Screen Count">
-
-<input id="reload" type="number" placeholder="Reload Time (sec)">
+<input id="reload" type="number" placeholder="Refresh Time (sec) Not compulsory ❗️ ">
 
 <label>Screen Height</label>
-
-<input type="range" id="size" min="200" max="600" value="300">
-
+<input type="range" id="size" min="200" max="700" value="auto">
 <p>Height: <span id="sizeValue">300</span>px</p>
 
-<button class="start" onclick="createFrames()">Start</button>
-<button class="stop" onclick="stopReload()">Stop</button>
-<button class="clear" onclick="clearFrames()">Clear</button>
+<button class="start" id="H" onclick="createFrames()">Start</button>
+<button class="stop" id="H" onclick="stopReload()">Stop</button>
+<button  class="clear" id="H" onclick="clearFrames()">Clear</button>
 
 <p>Total Screens: <span id="frameCount">0</span></p>
 
@@ -206,161 +236,195 @@ color:#94a3b8;
 
 <div class="frames" id="frames"></div>
 
-<!-- ABOUT -->
-
 <div class="about" id="about">
-
 <h3>About</h3>
+<div class="about" id="guide">
 
-<p>Multi Screen by M106T</p>
-<p>A powerful multi iframe viewing tool.</p>
+<h3>How to Use Multi Screen YouTube Player?</h3>
+
+<p>
+This tool allows you to watch multiple YouTube videos at the same time in a split-screen layout. Follow the steps below to get started:
+</p>
+
+<h4>1. Paste Video Link</h4>
+<p>
+Copy a YouTube video link and paste it into the input box. You can also add multiple links separated by commas.
+</p>
+
+<h4>2. Set Screen Count</h4>
+<p>
+Enter how many screens you want to display. If left empty, the tool will automatically use the number of links provided.
+</p>
+
+<h4>3. Adjust Screen Height</h4>
+<p>
+Use the slider to change the height of each video frame according to your preference.
+</p>
+
+<h4>4. Enable Autoplay</h4>
+<p>
+Turn on the autoplay button to automatically start all videos (videos will be muted due to browser policies).
+</p>
+
+<h4>5. Click Start</h4>
+<p>
+Press the Start button to generate multiple video screens instantly.
+</p>
+
+<h4>6. Optional Features</h4>
+<p>
+You can reload videos automatically using the reload option, or clear everything using the Clear button.
+</p>
+
+<p style="margin-top:15px;">
+This tool is perfect for multitasking, studying, trading, or monitoring multiple live streams at once.
+</p>
 
 </div>
+
+<div class="about">
+
+<h3 style="color:#22c55e">Benefits of Using Multi Screen YouTube Player</h3>
+
+<ul style="max-width:1000px;margin:auto;text-align:left; line-height:1.6;">
+
+<li>Watch multiple YouTube videos at the same time</li>
+<li>Perfect for students to learn from multiple tutorials</li>
+<li>Useful for traders monitoring multiple charts or live streams</li>
+<li>Save time by multitasking efficiently</li>
+<li>Compare videos side-by-side easily</li>
+
+</ul>
+
+</div>
+
+<p>Multi Screen by M106T</p>
+<p>A powerful multi screen viewing tool.</p>
+</div>
+
+
+
+
+<!--java script-->
+
+
 
 <script>
 
 let reloadInterval=null;
+let autoplay=false;
 
-/* THEME */
+/* NAV TOGGLE */
+function toggleMenu(){
+document.getElementById("navLinks").classList.toggle("active");
+}
 
+/* THEME FIX */
 function toggleTheme(){
-
 document.body.classList.toggle("light");
-
-if(document.body.classList.contains("light")){
-localStorage.setItem("theme","light");
-}else{
-localStorage.setItem("theme","dark");
+localStorage.setItem("theme",document.body.classList.contains("light"));
 }
 
-}
-
-if(localStorage.getItem("theme")==="light"){
+if(localStorage.getItem("theme")==="true"){
 document.body.classList.add("light");
 }
 
-/* SLIDER */
+/* AUTOPLAY */
+function toggleAutoplay(){
+autoplay=!autoplay;
+document.getElementById("autoBtn").innerText = autoplay ? "AutoPlay ON" : "AutoPlay OFF";
+}
 
+/* SLIDER */
 const slider=document.getElementById("size");
 const sizeValue=document.getElementById("sizeValue");
 
 slider.oninput=function(){
 sizeValue.innerText=this.value;
-
-document.querySelectorAll(".frames iframe").forEach(f=>{
+document.querySelectorAll("iframe").forEach(f=>{
 f.style.height=this.value+"px";
 });
 }
 
-/* LINK CONVERT */
-
+/* LINK FIX */
 function convertLink(url){
 
-try{
+url=url.trim();
 
 if(url.includes("watch?v=")){
-let id=url.split("v=")[1].split("&")[0];
-return "https://www.youtube.com/embed/"+id;
+return "https://www.youtube.com/embed/"+url.split("v=")[1].split("&")[0];
 }
 
 if(url.includes("youtu.be/")){
-let id=url.split("youtu.be/")[1];
-return "https://www.youtube.com/embed/"+id;
+return "https://www.youtube.com/embed/"+url.split("youtu.be/")[1];
 }
 
-}catch(e){}
+if(url.includes("/shorts/")){
+return "https://www.youtube.com/embed/"+url.split("/shorts/")[1];
+}
 
 return url;
-
 }
 
 /* CREATE */
-
 function createFrames(){
 
 stopReload();
 
-let link=document.getElementById("link").value.trim();
+let raw=document.getElementById("link").value.trim();
+if(!raw){ alert("Enter link"); return; }
+
+let links=raw.split(",").map(x=>x.trim()).filter(x=>x);
+
 let count=parseInt(document.getElementById("count").value);
 let reload=parseInt(document.getElementById("reload").value);
 let size=slider.value;
 
-if(!link){
-alert("Please enter link");
-return;
-}
-
-if(!count || count<1){
-count=1;
-}
-
-link=convertLink(link);
+if(!count || count<1) count=links.length;
+if(isNaN(reload)) reload=0;
 
 let container=document.getElementById("frames");
-
 container.innerHTML="";
 
 for(let i=0;i<count;i++){
 
-let box=document.createElement("div");
-box.className="frame-box";
+let link=convertLink(links[i % links.length]);
+
+let final=link;
+if(autoplay){
+final += (link.includes("?")?"&":"?")+"autoplay=1&mute=1&playsinline=1";
+}
 
 let iframe=document.createElement("iframe");
-iframe.src=link;
+iframe.src=final;
 iframe.style.height=size+"px";
 
-let btn=document.createElement("button");
-btn.innerText="⛶";
-btn.className="full";
-
-btn.onclick=()=>iframe.requestFullscreen();
-
-box.appendChild(iframe);
-box.appendChild(btn);
-
-container.appendChild(box);
-
+container.appendChild(iframe);
 }
 
 document.getElementById("frameCount").innerText=count;
 
-if(reload && reload>0){
-
+if(reload>0){
 reloadInterval=setInterval(()=>{
-
-document.querySelectorAll(".frames iframe").forEach(frame=>{
-frame.src=frame.src;
-});
-
+document.querySelectorAll("iframe").forEach(f=>f.src=f.src);
 },reload*1000);
-
 }
 
 }
 
 /* STOP */
-
 function stopReload(){
-
-if(reloadInterval){
 clearInterval(reloadInterval);
-reloadInterval=null;
-}
-
 }
 
 /* CLEAR */
-
 function clearFrames(){
-
 stopReload();
-
 document.getElementById("frames").innerHTML="";
 document.getElementById("frameCount").innerText="0";
-
 }
 
 </script>
 
 </body>
-</html>
+  </html>
