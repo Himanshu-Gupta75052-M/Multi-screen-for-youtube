@@ -353,6 +353,10 @@ return "https://www.youtube.com/embed/"+url.split("youtu.be/")[1];
 if(url.includes("/shorts/")){
 return "https://www.youtube.com/embed/"+url.split("/shorts/")[1];
 }
+
+if(url.includes("/live/")){
+return "https://www.youtube.com/embed/"+url.split("/live/")[1];
+  }
 return url;
 }
 
